@@ -8,4 +8,6 @@ return {
       vim.cmd([[colorscheme tokyonight-storm]])
     end,
   },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  {"sainnhe/gruvbox-material", name = "gruvbox", priority = 1000},
 }
