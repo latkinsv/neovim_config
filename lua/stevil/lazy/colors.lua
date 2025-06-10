@@ -8,6 +8,15 @@ return {
       vim.cmd([[colorscheme tokyonight-storm]])
     end,
   },
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-  {"sainnhe/gruvbox-material", name = "gruvbox", priority = 1000},
+  { "catppuccin/nvim", name = "catppuccin", priority = 999 },
+  { "sainnhe/gruvbox-material", name = "gruvbox", priority = 998,
+      config = function()
+        vim.g.gruvbox_material_background = 'medium'
+        vim.g.gruvbox_material_foreground = 'mix'
+        vim.g.gruvbox_material_better_performance = true
+        vim.g.gruvbox_material_enable_bold = true
+        vim.g.gruvbox_material_enable_italic = true
+        vim.cmd.colorscheme('gruvbox-material')
+      end
+    },
 }
