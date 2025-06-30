@@ -2,8 +2,5 @@
 
 TODO:
 
-    1. Key bindings
-    1. Colorscheme: groovebox, tokionight
-    2. LSP complition: lua, python, C\C++, C crosscompilation
-    3. Debug Adapter Protocol (DAP): gdb, some python debugger
-    4. Lualine
+    1. LSP complition: C crosscompilation
+    2. Debug Adapter Protocol (DAP): gdb, some python debugger
