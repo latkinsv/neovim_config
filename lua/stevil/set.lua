@@ -33,3 +33,6 @@ opt.updatetime = 50
 opt.colorcolumn = "80"
 
 opt.listchars = [[tab:<->,eol:↵,extends:⋯,precedes:⋯,space:␣,trail:•,nbsp:␠]]
+
+vim.wo.conceallevel = 2
+

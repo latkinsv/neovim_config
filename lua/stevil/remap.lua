@@ -26,8 +26,10 @@ map('n', '<leader>lws', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
 map('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>')
 map('n', '<leader>lf', '<cmd>lua vim.lsp.buf.format()<CR>')
 map('n', '<leader>lR', '<cmd>lua vim.lsp.buf.rename()<CR>')
---require('keys/vimspector')
 
+-- Open my wiki (replace vimwiki by mkdnflow)
+map('n', '<leader>ww', '<cmd>tabnew ~/notes/index.md<CR>')
+--require('keys/vimspector')
 --require('keys/nvim-dap_keys')
 --require('keys/telescope')
 ---------------------------- Telescope keys ----------------------------------
