@@ -63,6 +63,15 @@ return {
         }
     }
 
+    -- Ruff - python linter and formatter language server settings go here
+    lspconfig.ruff.setup{
+      init_options = {
+        settings = {
+            lineLength = 100
+        }
+      }
+    }
+
     -- C\C++ LSP
     lspconfig.clangd.setup{
         capabilities = capabilities,
@@ -103,6 +112,13 @@ return {
             source = true,
             header = "",
             prefix = "",
+        },
+    })
+
+    vim.lsp.buf.hover({
+        -- update_in_insert = true,
+        float = {
+            border = "rounded",
         },
     })
   end,
