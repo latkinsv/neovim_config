@@ -15,6 +15,9 @@ return {
             vim.keymap.set("n", "<leader>B", function()
                 dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
             end, { desc = "Debug: Set Conditional Breakpoint" })
+            vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+              require('dap.ui.widgets').hover()
+            end, { desc = "Debug: View the value for the expression under the cursor" })
 
             dap.adapters.python = function(cb, config)
                 if config.request == 'attach' then
