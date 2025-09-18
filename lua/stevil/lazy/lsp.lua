@@ -17,13 +17,15 @@ return {
 
   config = function()
     local cmp = require('cmp')
-    local lspconfig = require("lspconfig")
+    local lspconfig = vim.lsp.config
     local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
     --local mason = require("mason")
     --mason.setup()
 
+    vim.lsp.enable({'lua_ls', 'pylsp', 'ruff', 'clangd'})
+
     -- Lua LSP
-    lspconfig.lua_ls.setup({
+    lspconfig( 'lua_ls', {
       capabilities = capabilities,
       settings = {
         Lua = {
@@ -51,7 +53,7 @@ return {
     })
 
     -- Python LSP
-    lspconfig.pylsp.setup{
+    lspconfig( 'pylsp', {
         capabilities = capabilities,
         settings = {
             pylsp = {
@@ -61,24 +63,24 @@ return {
                 }
             }
         }
-    }
+    })
 
     -- Ruff - python linter and formatter language server settings go here
-    lspconfig.ruff.setup{
+    lspconfig('ruff', {
       init_options = {
         settings = {
             lineLength = 100
         }
       }
-    }
+    })
 
     -- C\C++ LSP
-    lspconfig.clangd.setup{
+    lspconfig ('clangd', {
         capabilities = capabilities,
         cmd = {
             "clangd",
         }
-    }
+    })
 
     -- ...
 
