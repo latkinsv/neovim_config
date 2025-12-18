@@ -2,7 +2,11 @@
 return {
     {
         "mfussenegger/nvim-dap",
-        lazy = false,
+         dependencies = {
+            'rcarriga/nvim-dap-ui', -- Optional, for a better UI
+            'theHamsta/nvim-dap-virtual-text', -- Optional, for virtual text
+         },
+        lazy = true,
         config = function()
             local dap = require("dap")
             dap.set_log_level("DEBUG")
@@ -11,7 +15,10 @@ return {
             vim.keymap.set("n", "<F6>", dap.step_over, { desc = "Debug: Step Over" })
             vim.keymap.set("n", "<F7>", dap.step_into, { desc = "Debug: Step Into" })
             vim.keymap.set("n", "<F8>", dap.step_out, { desc = "Debug: Step Out" })
-            vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint, { desc = "Debug: Toggle Breakpoint" })
+            vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint,
+                { desc = "Debug: Toggle Breakpoint" })
+            vim.keymap.set("n", "<leader>dt", dap.terminate,
+                { desc = "Debug: Terminate session" })
             vim.keymap.set("n", "<leader>B", function()
                 dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
             end, { desc = "Debug: Set Conditional Breakpoint" })
@@ -19,6 +26,7 @@ return {
               require('dap.ui.widgets').hover()
             end, { desc = "Debug: View the value for the expression under the cursor" })
 
+            ------------------ Python -------------------
             dap.adapters.python = function(cb, config)
                 if config.request == 'attach' then
                   ---@diagnostic disable-next-line: undefined-field
@@ -71,47 +79,84 @@ return {
              },
            }
 
-        --TODO: add dap.adapters.c and dap.configurations.c
+            ------------------ C \ C++ \ Rust -------------------
+            dap.adapters.gdb = {
+              type = "executable",
+              command = "gdb",
+              args = { "--interpreter=dap", "--eval-command", "set print pretty on" }
+            }
 
-        end
+            dap.configurations.c = {
+              {
+                name = "Launch",
+                type = "gdb",
+                request = "launch",
+                program = function()
+                  return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                end,
+                args = {}, -- provide arguments if needed
+                cwd = "${workspaceFolder}",
+                stopAtBeginningOfMainSubprogram = false,
+                console = "internalConsole",
+              },
+              {
+                name = "Select and attach to process",
+                type = "gdb",
+                request = "attach",
+                program = function()
+                  return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                end,
+                pid = function()
+                  local name = vim.fn.input('Executable name (filter): ')
+                  return require("dap.utils").pick_process({ filter = name })
+                end,
+                cwd = '${workspaceFolder}'
+              },
+              {
+                name = 'Attach to gdbserver :1234',
+                type = 'gdb',
+                request = 'attach',
+                target = 'localhost:1234',
+                program = function()
+                  return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                end,
+                cwd = '${workspaceFolder}'
+              }
+            }
+
+            dap.configurations.cpp = dap.configurations.c
+            dap.configurations.rust = dap.configurations.c
+
+        end -- end of config
     },
 
     { -- DAP UI configuration
         "rcarriga/nvim-dap-ui",
+        lazy = false,
         dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
 
         config = function()
             local dap = require("dap")
             local dapui = require("dapui")
 
-            local layouts = { {
-                elements = { {
-                    id = "scopes",
-                    size = 0.25
-                  }, {
-                    id = "breakpoints",
-                    size = 0.25
-                  }, {
-                    id = "stacks",
-                    size = 0.25
-                  }, {
-                    id = "watches",
-                    size = 0.25
-                  } },
+            local layouts = {
+              { elements = {
+                    { id = "scopes", size = 0.25 },
+                    { id = "breakpoints", size = 0.25 },
+                    { id = "stacks", size = 0.25 },
+                    { id = "watches", size = 0.25 }
+                },
                 position = "left",
                 size = 40
-              }, {
-                elements = { {
-                    id = "repl",
-                    size = 0.5
-                  }, {
-                    id = "console",
-                    size = 0.5
-                  } },
+              },
+              { elements = {
+                    { id = "repl", size = 0.5 },
+                    { id = "console", size = 0.5 }
+                },
                 position = "bottom",
                 size = 10
-              } }
-
+              }
+            }
 
             dapui.setup({
                 layouts = layouts,
@@ -136,5 +181,5 @@ return {
                 end
             end
         end,
-    }
+    },
 }
